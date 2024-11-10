@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { Inertia, PageProps } from "@inertiajs/inertia";
 import { useState } from "react";
 
@@ -156,7 +156,7 @@ const UserDetails: React.FC<Props> = ({ user, flash }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    placeholder="e.g. MR / MRS / MS"
+                                                    placeholder="e.g. Mr / Mrs / Ms"
                                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                                                 />
                                             </div>
@@ -174,7 +174,7 @@ const UserDetails: React.FC<Props> = ({ user, flash }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    placeholder="e.g. SR / JR / III"
+                                                    placeholder="e.g. Sr / Jr / III"
                                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                                                 />
                                             </div>
@@ -257,7 +257,7 @@ const UserDetails: React.FC<Props> = ({ user, flash }) => {
                                                     handleDestroy(user.id)
                                                 }
                                             >
-                                                Delete
+                                                Trash
                                             </button>
                                             <button
                                                 type="submit"

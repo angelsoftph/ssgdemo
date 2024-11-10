@@ -46,7 +46,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'prefixname' => 'nullable|string|max:255',
+            'prefixname' => ['nullable', 'in:Mr,Ms,Mrs'],
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
@@ -88,35 +88,43 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $validatedData = $request->validate([
-            'prefixname' => 'nullable|string|max:255',
-            'firstname' => 'required|string|max:255',
-            'middlename' => 'nullable|string|max:255',
-            'lastname' => 'required|string|max:255',
-            'suffixname' => 'nullable|string|max:255',
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
-
-        $user->prefixname = $validatedData['prefixname'];
-        $user->firstname = $validatedData['firstname'];
-        $user->middlename = $validatedData['middlename'];
-        $user->lastname = $validatedData['lastname'];
-        $user->suffixname = $validatedData['suffixname'];
-        $user->username = $validatedData['username'];
-        $user->email = $validatedData['email'];
-
-        if (!empty($validatedData['password'])) {
-            $user->password = Hash::make($validatedData['password']);
-        }
-
         try {
-            $user->save();
+            $validatedData = $request->validate([
+                'prefixname' => ['nullable', 'in:Mr,Ms,Mrs'],
+                'firstname' => 'required|string|max:255',
+                'middlename' => 'nullable|string|max:255',
+                'lastname' => 'required|string|max:255',
+                'suffixname' => 'nullable|string|max:255',
+                'username' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+                'password' => 'nullable|string|min:8|confirmed',
+            ]);
+
+            $user->prefixname = $validatedData['prefixname'];
+            $user->firstname = $validatedData['firstname'];
+            $user->middlename = $validatedData['middlename'];
+            $user->lastname = $validatedData['lastname'];
+            $user->suffixname = $validatedData['suffixname'];
+            $user->username = $validatedData['username'];
+            $user->email = $validatedData['email'];
+
+            if (!empty($validatedData['password'])) {
+                $user->password = Hash::make($validatedData['password']);
+            }
+
+            $user->update($validatedData);
             return redirect()->back()->with('success', 'User updated successfully.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            //return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update user.');
         }
+
+        // try {
+        //     $user->save();
+        //     return redirect()->back()->with('success', 'User updated successfully.');
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->with('error', $e->getMessage());
+        // }
     }
 
     public function destroy($id) {
